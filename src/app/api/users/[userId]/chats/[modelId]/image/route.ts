@@ -26,15 +26,22 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
     var raw = JSON.stringify({
         "key": process.env.MODELS_LAB_TOKEN!,
         "prompt": model.image_prompt,
-        "negative_prompt": "bad quality",
-        "width": "384",
-        "height": "512",
+        "negative_prompt": "(worst quality,low quality:1.4), (depth of field,blurry:1.2), (greyscale,monochrome:1.1), 3D face, cropped, lowres, text, (nsfw:1.3), (worst quality:2), (low quality:2), (normal quality:2), normal quality, (grayscale), skin spots, acnes, skin blemishes, age spot, (ugy:1.331), (duplicate:1.331), (morbid:1.21), (mutilated:1.21), (tranny:1.331), mutated hands, (poorly drawn hands:1.5), blurry, (bad anatomy:1.21), (bad proportions:1.331), extra limbs, (disfigured:1.331), (missing arms:1.331), (extra legs:1.331), (fused fingers:1.61051), (too many fingers:1.61051), (unclear eyes:1.331), lowers, bad hands, missing fingers, extra digit, bad hands, missing fingers, (((extra arms and legs)))",
+        "width": "512",
+        "height": "768",
         "safety_checker": false,
-        "seed": null,
         "samples": 1,
-        "base64": false,
+        "num_inference_steps": 35,
+        "seed": null,
+        "guidance_scale": 5,
+        "lora_strength": 1,
+        "scheduler": "DPMSolverMultistepScheduler",
+        "algorithm_type": "dpmsolver+++",
+        "use_karras_sigmas": "yes",
+        "model_id": "epicrealism-natural-sin-r",
+        "lora_model": "noemi,epicrealismhelper",
         "webhook": null,
-        "track_id": null
+        "track_id": null,
     });
 
     var requestOptions = {

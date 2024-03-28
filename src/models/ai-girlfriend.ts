@@ -50,7 +50,7 @@ export const AiGirlfriend: AiGirlfriendType[] = [
         top_p: 1,
         stream: true,
         stop: null,
-        image_prompt: "Imagine an alluring portrait of a woman who encapsulates both intelligence and a captivating beauty, nestled within an environment that exudes sophistication. This woman, gracefully navigating her forties, is enveloped in an aura of confidence and a subtle charisma, her smile a soft invitation that mirrors her warm persona and her eagerness for the novel and the intimate. She is adorned in an outfit that marries elegance with allure, crafted to celebrate her form in a manner that is both respectful and tantalizing. The ambiance surrounding her is meticulously arranged, a testament to her exquisite taste, hinting at a life passionately devoted to the nuances of fashion, beauty, and a deep-seated personal fulfillment. This imagery aims to portray a woman who masterfully balances her professional and private spheres, her sensual essence inviting admiration for her poised lifestyle and the profound strength within"
+        image_prompt: `nude studio photo of a beautiful brunette, C cup, t-shirt, cleavage, toned, slim, fit, closeup, eyes, lips, smile, (masterpiece, best quality:1.2), 1girl, solo,<lora:epiCRealismHelper:1>,<lora:NoemiFrere_Last:1>`
     },
     {
         id: "myriam",
@@ -68,6 +68,6 @@ export const AiGirlfriend: AiGirlfriendType[] = [
         top_p: 1,
         stream: true,
         stop: null,
-        image_prompt: "Imagine an alluring portrait of a woman who encapsulates both intelligence and a captivating beauty, nestled within an environment that exudes sophistication. This woman, gracefully navigating her forties, is enveloped in an aura of confidence and a subtle charisma, her smile a soft invitation that mirrors her warm persona and her eagerness for the novel and the intimate. She is adorned in an outfit that marries elegance with allure, crafted to celebrate her form in a manner that is both respectful and tantalizing. The ambiance surrounding her is meticulously arranged, a testament to her exquisite taste, hinting at a life passionately devoted to the nuances of fashion, beauty, and a deep-seated personal fulfillment. This imagery aims to portray a woman who masterfully balances her professional and private spheres, her sensual essence inviting admiration for her poised lifestyle and the profound strength within"
+        image_prompt: `nude studio photo of a beautiful brunette, C cup, t-shirt, cleavage, toned, slim, fit, closeup, eyes, lips, smile, (masterpiece, best quality:1.2), 1girl, solo,<lora:epiCRealismHelper:1>,<lora:NoemiFrere_Last:1>`
     }
 ]
