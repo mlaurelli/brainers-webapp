@@ -1,13 +1,12 @@
-import { openDB } from "@/utils/db"
+import { getSubscriptionUsageData, getUserData } from "@/utils/db"
 import { UserType } from "@/utils/useUser"
 import { NextRequest } from "next/server"
 
 export async function GET(request: NextRequest, { params }: { params: { userId: string } }) {
 
   try {
-    const db = await openDB()
-    const userData = await db.all('SELECT * FROM users where id = ?', params.userId)
-    const subscriptionUsageData = await db.all('SELECT * FROM SubscriptionsUsage where UserID = ?', params.userId)
+    const userData = await getUserData(params.userId)
+    const subscriptionUsageData = await getSubscriptionUsageData(params.userId)
 
     const user: UserType = {
       id: userData[0].id,

@@ -1,14 +1,9 @@
-import { openDB } from "@/utils/db"
+import { getConversations, newConversationForUser } from "@/utils/db"
 import { NextRequest } from "next/server"
 import { v5 as uuidv5 } from 'uuid'
 
 export async function GET(request: NextRequest, { params }: { params: { userId: string } }) {
-  const db = await openDB()
-  const data = await db.all(`
-  SELECT c.*
-  FROM Conversations c
-  where c.UserID = ? 
-  ORDER BY c.CreatedAT DESC`, params.userId)
+  const data = await getConversations(params.userId)
 
   const conversations = data.map(conversation => {
     return {
@@ -28,10 +23,7 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
   const conversationID = uuidv5(`${params.userId}-${modelId}`, uuidv5.DNS)
 
   try {
-    const db = await openDB()
-
-    await db.run(`INSERT INTO Conversations (ConversationID, UserID, ModelID) 
-      VALUES (?, ?, ?) ON CONFLICT(ConversationID) DO NOTHING`, conversationID, params.userId, modelId);
+    await newConversationForUser(conversationID, modelId, params.userId)
     console.log({ message: 'Conversation added successfully' })
 
   } catch (error) {

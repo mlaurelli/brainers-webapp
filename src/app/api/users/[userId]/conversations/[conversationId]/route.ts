@@ -1,45 +1,17 @@
 import { ConversationType } from "@/components/chat/chatbox"
-import { AiGirlfriend } from "@/models/ai-girlfriend"
-import { openDB } from "@/utils/db"
+import { AiGirlfriend } from "@/models/ai-girlfriend";
+import { deleteConversationForUser, getConversationWithMessages, saveMessage } from "@/utils/db"
 import { NextRequest } from "next/server"
-import { v4 as uuidv4, v5 as uuidv5 } from 'uuid';
 
 export async function GET(request: NextRequest, { params }: { params: { userId: string, conversationId: string } }) {
-  const models = AiGirlfriend.map(model => model.id)
-
   try {
-    const db = await openDB()
+    const data = await getConversationWithMessages(params.conversationId, params.userId)
 
-    const conversationRecord = await db.all(`
-    SELECT c.*
-    FROM Conversations c
-    where c.ConversationID = ? and c.UserID = ?`, params.conversationId, params.userId)
-
-    const data = await db.all(`
-    SELECT m.*
-    FROM Messages m 
-    where m.ConversationID = ? `, params.conversationId)
-
-    let conversation: ConversationType[] | null = null
-
-    const girlfriend = AiGirlfriend.filter(model => model.id = conversationRecord[0].ModelID)[0]
-
-    conversation = data.map(message => {
-      return {
-        type: models.includes(message.UserOrModelID) ? "in" : "out",
-        text: message.MessageText,
-        image: message.MessageImage,
-        avatar: models.indexOf(message.UserOrModelID) === -1 ? "/dist/media/img/avatar6.jpg" : girlfriend.avatar,
-        name: models.includes(message.UserOrModelID) ? girlfriend.id : "me"
-      }
-    })
-
-    return Response.json({ conversation, modelId: girlfriend.id })
+    return Response.json({ conversation: data.conversation, modelId: data.modelId })
   } catch (error) {
     console.log({ message: "looking at conversationid:" + params.conversationId, error })
     return Response.json({ conversation: [], modelId: "error" })
   }
-
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { userId: string, conversationId: string } }) {
@@ -50,18 +22,21 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
   const conversationID = params.conversationId
   const userOrModelID = lastMessage.type === 'in' ? modelId : params.userId
 
-  try {
-    const db = await openDB();
+  const models = AiGirlfriend.map(model => model.id)
+  const girlfriend = AiGirlfriend.filter(model => model.id == modelId)[0]
 
-    const messageID = uuidv4()
-    await db.run(`INSERT INTO messages (
-      MessageID,
-      ConversationID,
-      UserOrModelID,
-      MessageText,
-      MessageImage
-    ) VALUES (?, ?, ?, ?, ?) ON CONFLICT(MessageID) DO NOTHING`, messageID, conversationID, userOrModelID, lastMessage.text, lastMessage.image)
-    console.log({ message: 'MessageId inserted successfully: ' + messageID, lastMessage })
+  const message = {
+    type: lastMessage.type,
+    text: lastMessage.text,
+    image: lastMessage.image,
+    avatar: models.indexOf(userOrModelID) === -1 ? "/dist/media/img/avatar6.jpg" : girlfriend.avatar,
+    name: models.includes(userOrModelID) ? girlfriend.id : "me"
+  } as ConversationType
+
+  try {
+    await saveMessage(message, params.userId, modelId, conversationID)
+
+    console.log({ message: 'MessageId inserted successfully: ', lastMessage, conversationID })
   } catch (error) {
     console.error({ message: "Error during saving messages", lastMessage, params, conversationID, error });
     return Response.json({ message: "Error during saving messages", lastMessage, params, conversationID }, { status: 500 })
@@ -72,13 +47,7 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 
 export async function DELETE(request: NextRequest, { params }: { params: { userId: string, conversationId: string } }) {
   try {
-    const db = await openDB()
-
-    await db.run(`DELETE 
-    FROM Messages 
-    WHERE ConversationID = ? 
-    AND ConversationID IN (SELECT ConversationID FROM Conversations WHERE ConversationID = ? AND UserID = ?)`, params.conversationId, params.conversationId, params.userId)
-
+    await deleteConversationForUser(params.conversationId, params.userId)
     return Response.json({ status: "ok" })
   } catch (error) {
     console.log({ message: "cleaning up conversationid:" + params.conversationId, error })

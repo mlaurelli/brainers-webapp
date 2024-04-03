@@ -55,14 +55,14 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
 
     const json = await response.json()
 
-    if (json.status !== "success") {
-        return Response.json({ error: "error when creating image for conversationId" })
+    if ( !["success", "processing"].includes(json.status)) {
+        return Response.json({ error: "error when creating image for conversationId", conversationId, json })
     }
 
     const imageMessage = {
         type: 'in',
         text: null,
-        image: json.output[0],
+        image: json.status === "processing" ? json.future_links[0] : json.output[0],
         avatar: model.avatar,
         name: model.id
     } as ConversationType

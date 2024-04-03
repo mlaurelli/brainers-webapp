@@ -41,7 +41,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             // Store the status in your database and check when a user accesses your service.
             // This approach helps you avoid hitting rate limits.
             try {
-                updateSubscriptionForCustomer(customerId)
+                await updateSubscriptionForCustomer(customerId)
             } catch (error) {
                 console.error({ message: "error during save updating payment details for customerId", customerId, error })
             }
