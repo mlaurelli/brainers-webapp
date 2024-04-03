@@ -60,3 +60,11 @@ export async function getSubscriptionUsageData(userId: string) {
     JOIN Subscriptions s ON s.SubscriptionID = su.SubscriptionID  
     WHERE su.UserID = ?`, userId)
 }
+
+export async function updateSubscriptionForCustomer(customerId: string) {
+
+  const db = await openDB()
+
+  const userData = await db.all('SELECT * FROM users where payment_customer_id = ?', customerId)
+  await db.run("UPDATE SubscriptionsUsage SET EndSubscription = DATE(CURRENT_TIMESTAMP, '1 month') WHERE UserID = ?", userData[0].id)
+}

@@ -1,11 +1,10 @@
+import { updateSubscriptionForCustomer } from "@/utils/db";
 import { NextRequest, NextResponse } from "next/server"
 
 // export const config = {  api: {    bodyParser: false,  },};
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 export async function POST(req: NextRequest, res: NextResponse) {
-    let data;
-    let eventType;
     // Check if webhook signing is configured.
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
     let event;
@@ -25,10 +24,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
         return NextResponse.json({ error: err }, { status: 400 })
     }
     // Extract the object from the event.
-    data = event.data;
-    eventType = event.type;
+    const data = event.data
+    const eventType = event.type
 
-    console.log(eventType)
+    console.log(data)
+
+    const customerId = data.object.customer
 
     switch (eventType) {
         case 'checkout.session.completed':
@@ -39,6 +40,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
             // Continue to provision the subscription as payments continue to be made.
             // Store the status in your database and check when a user accesses your service.
             // This approach helps you avoid hitting rate limits.
+            try {
+                updateSubscriptionForCustomer(customerId)
+            } catch (error) {
+                console.error({ message: "error during save updating payment details for customerId", customerId, error })
+            }
             break;
         case 'invoice.payment_failed':
             // The payment failed or the customer does not have a valid payment method.
