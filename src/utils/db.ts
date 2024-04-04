@@ -6,10 +6,10 @@ import { AiGirlfriend } from '@/models/ai-girlfriend'
 export function openDB(): Connection {
 
   const access: ConnectionOptions = {
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'brain',
+    host: process.env.DB_HOST!,
+    user: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!,
+    database: process.env.DB_NAME!,
     // debug: true
   }
   let conn = mysql.createConnection(access)
