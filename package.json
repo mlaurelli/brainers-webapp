@@ -19,6 +19,7 @@
     "@stripe/react-stripe-js": "^2.5.1",
     "@stripe/stripe-js": "^3.0.7",
     "groq-sdk": "^0.3.2",
+    "mysql2": "^3.9.3",
     "next": "14.1.1",
     "next-auth": "^4.24.6",
     "pg": "^8.11.3",
@@ -33,7 +34,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.12.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.8",
