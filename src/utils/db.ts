@@ -27,7 +27,7 @@ export function closeDB(connection: Connection) {
 
 export async function getConversations(userId: string) {
   const db = openDB()
-  return new Promise((resolve, reject) => {
+  return new Promise<RowDataPacket[]>((resolve, reject) => {
     db.query<RowDataPacket[]>(`SELECT c.*
       FROM Conversations c
       where c.UserID = ? 
@@ -172,8 +172,8 @@ export async function getSubscriptionUsageData(userId: string) {
   const db = openDB()
 
   // get usage and limit 
-  return new Promise((resolve, reject) => {
-    db.query(`Select 
+  return new Promise<RowDataPacket[]>((resolve, reject) => {
+    db.query<RowDataPacket[]>(`Select 
     su.SubscriptionID, 
     su.MessagesUsed, s.MessagesLimit,
     su.ImagesUsed, s.ImagesLimit,
@@ -256,7 +256,7 @@ export async function getUserData(userId: string) {
 
   const db = openDB()
 
-  return new Promise((resolve, reject) => {
+  return new Promise<RowDataPacket[]>((resolve, reject) => {
     db.query<RowDataPacket[]>(`SELECT * FROM users where id = '${userId}'`, (err, result) => {
       if (err) {
         console.error(err)
