@@ -49,9 +49,9 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
         headers: myHeaders,
         body: raw,
         redirect: 'follow' as unknown as RequestRedirect
-    };
+    }
 
-    const response = await fetch("https://modelslab.com/api/v6/realtime/text2img", requestOptions)
+    const response = await fetch("https://modelslab.com/api/v6/images/text2img", requestOptions)
 
     const json = await response.json()
 
