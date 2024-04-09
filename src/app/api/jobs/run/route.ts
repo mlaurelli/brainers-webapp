@@ -13,6 +13,10 @@ export async function POST(_req: NextRequest, _res: NextResponse) {
 
   const job = await getNextJob()
 
+  if (job.length === 0) {
+    return NextResponse.json({ success: true, message: 'Queue empty' }, {status: 304})
+  }
+
   if (job.length > 0 && job[0].JobName === 'store_chat_image') {
     const saved = await saveImageToStorage(job[0].Action, `${job[0].MessageID}.png`)
     if (!saved) {
