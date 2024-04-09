@@ -13,7 +13,7 @@ export async function POST(_req: NextRequest, _res: NextResponse) {
 
   const job = await getNextJob()
 
-  if (job && job[0].JobName === 'store_chat_image') {
+  if (job.length > 0 && job[0].JobName === 'store_chat_image') {
     const saved = await saveImageToStorage(job[0].Action, `${job[0].MessageID}.png`)
     if (!saved) {
       return NextResponse.json({ success: false, message: 'Retry next time', params: [job[0].MessageID, job[0].Action] })
