@@ -116,8 +116,21 @@ async function setup() {
     if (err) throw err
   }))
 
+  db.execute(`
+  -- Creazione della tabella JobsQueue
+    CREATE TABLE IF NOT EXISTS JobsQueue (
+      JobId VARCHAR(36) PRIMARY KEY,
+      JobName VARCHAR(36),
+      MessageID VARCHAR(36),
+      Action VARCHAR(1000),
+      CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `, ((err, _result) => {
+    if (err) throw err
+  }))
+
   // Close connection
-  client.closeDB(db)
+  db.end()
 }
 
 setup()

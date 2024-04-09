@@ -11,6 +11,7 @@ export type AiGirlfriendType = {
     stream: boolean
     stop: string | null
     image_prompt: string
+    image_negative_prompt: string
 }
 
 
@@ -50,7 +51,8 @@ export const AiGirlfriend: AiGirlfriendType[] = [
         top_p: 1,
         stream: true,
         stop: null,
-        image_prompt: `nude studio photo of a beautiful brunette, C cup, t-shirt, cleavage, toned, slim, fit, closeup, eyes, lips, smile, (masterpiece, best quality:1.2), 1girl, solo,<lora:epiCRealismHelper:1>,<lora:NoemiFrere_Last:1>`
+        image_prompt: `nude studio photo of a beautiful brunette, C cup, t-shirt, cleavage, toned, slim, fit, closeup, eyes, lips, smile, (masterpiece, best quality:1.2), 1girl, solo,<lora:epiCRealismHelper:1>,<lora:NoemiFrere_Last:1>`,
+        image_negative_prompt: "(worst quality,low quality:1.4), (depth of field,blurry:1.2), (greyscale,monochrome:1.1), 3D face, cropped, lowres, text, (nsfw:1.3), (worst quality:2), (low quality:2), (normal quality:2), normal quality, (grayscale), skin spots, acnes, skin blemishes, age spot, (ugy:1.331), (duplicate:1.331), (morbid:1.21), (mutilated:1.21), (tranny:1.331), mutated hands, (poorly drawn hands:1.5), blurry, (bad anatomy:1.21), (bad proportions:1.331), extra limbs, (disfigured:1.331), (missing arms:1.331), (extra legs:1.331), (fused fingers:1.61051), (too many fingers:1.61051), (unclear eyes:1.331), lowers, bad hands, missing fingers, extra digit, bad hands, missing fingers, (((extra arms and legs)))"
     },
     {
         id: "myriam",
@@ -68,6 +70,7 @@ export const AiGirlfriend: AiGirlfriendType[] = [
         top_p: 1,
         stream: true,
         stop: null,
-        image_prompt: `nude studio photo of a beautiful brunette, C cup, t-shirt, cleavage, toned, slim, fit, closeup, eyes, lips, smile, (masterpiece, best quality:1.2), 1girl, solo,<lora:epiCRealismHelper:1>,<lora:NoemiFrere_Last:1>`
+        image_prompt: `nude studio photo of a beautiful brunette, C cup, t-shirt, cleavage, toned, slim, fit, closeup, eyes, lips, smile, (masterpiece, best quality:1.2), 1girl, solo,<lora:epiCRealismHelper:1>,<lora:NoemiFrere_Last:1>`,
+        image_negative_prompt: "(worst quality,low quality:1.4), (depth of field,blurry:1.2), (greyscale,monochrome:1.1), 3D face, cropped, lowres, text, (nsfw:1.3), (worst quality:2), (low quality:2), (normal quality:2), normal quality, (grayscale), skin spots, acnes, skin blemishes, age spot, (ugy:1.331), (duplicate:1.331), (morbid:1.21), (mutilated:1.21), (tranny:1.331), mutated hands, (poorly drawn hands:1.5), blurry, (bad anatomy:1.21), (bad proportions:1.331), extra limbs, (disfigured:1.331), (missing arms:1.331), (extra legs:1.331), (fused fingers:1.61051), (too many fingers:1.61051), (unclear eyes:1.331), lowers, bad hands, missing fingers, extra digit, bad hands, missing fingers, (((extra arms and legs)))"
     }
 ]

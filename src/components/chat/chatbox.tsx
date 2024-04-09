@@ -12,6 +12,7 @@ export type ConversationType = {
     image: string | null
     avatar: string
     name: string
+    messageId?: string
 }
 
 export type AiChatGirlfriendType = {

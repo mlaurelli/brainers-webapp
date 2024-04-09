@@ -19,3 +19,20 @@ https://docs.stripe.com/api/subscriptions/object stripe subscriptions
 https://docs.stripe.com/api/invoices/object
 https://docs.stripe.com/billing/subscriptions/webhooks
 https://developers.bluesnap.com/reference/test-credit-cards 5555555555554444
+
+
+# new chat
+
+https://github.com/yourjhay/simple-chat/tree/master -> tailwind
+https://tailwindcomponents.com/component/chat -> tailwind
+https://medium.com/@awaisshaikh94/chat-component-built-with-react-and-material-ui-c2b0d9ccc491 -> material
+
+
+- <s>extract image negative prompt to ai-chat-models</s>
+- <s>pass to langchain for chat</s>
+- check fe (and implement)
+- <s>save images locally</s>
+- <s>show local images</s>
+- <s>audio leave streaming</s>
+
+URL=http://localhost:3000/ HTTP_BASIC_AUTH=brain:brain node src/jobs/job-queue.ts

@@ -20,7 +20,7 @@ export function openDB(): Connection {
 }
 
 export function closeDB(connection: Connection) {
-  connection.end()
+  // Currently not needed, useful in case we need to enhance db connection pool management
 }
 
 // // ---------------- Conversations
@@ -34,7 +34,7 @@ export async function getConversations(userId: string) {
       ORDER BY c.CreatedAT DESC`, [userId], (err, res) => {
       if (err) throw (err)
       else resolve(res)
-    })
+    }).on('end', () => closeDB(db))
   })
 }
 
@@ -72,13 +72,14 @@ export async function getConversationWithMessages(conversationId: string, userId
             text: message.MessageText,
             image: message.MessageImage,
             avatar: models.indexOf(message.UserOrModelID) === -1 ? "/dist/media/img/avatar6.jpg" : girlfriend.avatar,
-            name: models.includes(message.UserOrModelID) ? girlfriend.id : "me"
+            name: models.includes(message.UserOrModelID) ? girlfriend.id : "me",
+            messageId: message.MessageID
           } as ConversationType
         })
 
         resolve({ conversation, modelId: girlfriend.id, conversationId })
       })
-    })
+    }).on('end', () => closeDB(db))
   })
 }
 
@@ -91,7 +92,7 @@ export async function newConversationForUser(conversationId: string, modelId: st
       console.error(err)
       throw err
     }
-  })
+  }).on('end', () => closeDB(db))
 }
 
 export async function deleteConversationForUser(conversationId: string, userId: string) {
@@ -106,11 +107,11 @@ export async function deleteConversationForUser(conversationId: string, userId: 
         console.error(err)
         throw err
       }
-    })
+    }).on('end', () => closeDB(db))
 }
 
 export async function saveMessage(message: ConversationType, userId: string, modelId: string, conversationId: string) {
-  const db = await openDB()
+  const db = openDB()
   const userOrModelID = message.type === 'in' ? modelId : userId
 
   const messageID = uuidv4()
@@ -126,8 +127,23 @@ export async function saveMessage(message: ConversationType, userId: string, mod
         console.error(err)
         throw err
       }
-    })
+    }).on('end', () => closeDB(db))
+
+    return Promise.resolve(messageID)
 }
+
+export async function updateMessageImage(messageId: string, path: string) {
+  const db = openDB()
+
+  // update usage 
+  db.query(`UPDATE Messages SET MessageImage = '${path}' WHERE MessageID = ?`, [messageId], (err, result) => {
+    if (err) {
+      console.error(err)
+      throw err
+    }
+  }).on('end', () => closeDB(db))
+}
+
 
 // ---------------- Subscriptions
 
@@ -140,7 +156,7 @@ export async function updateMessageUsage(userId: string) {
       console.error(err)
       throw err
     }
-  })
+  }).on('end', () => closeDB(db))
 }
 
 export async function updateImageUsage(userId: string) {
@@ -152,7 +168,7 @@ export async function updateImageUsage(userId: string) {
       console.error(err)
       throw err
     }
-  })
+  }).on('end', () => closeDB(db))
 }
 
 export async function updateAudioUsage(userId: string) {
@@ -164,7 +180,7 @@ export async function updateAudioUsage(userId: string) {
       console.error(err)
       throw err
     }
-  })
+  }).on('end', () => closeDB(db))
 }
 
 export async function getSubscriptionUsageData(userId: string) {
@@ -188,7 +204,7 @@ export async function getSubscriptionUsageData(userId: string) {
       } else {
         resolve(result)
       }
-    })
+    }).on('end', () => closeDB(db))
   })
 }
 
@@ -203,7 +219,7 @@ export async function updateSubscriptionForCustomer(customerId: string) {
           console.error(err)
           throw err
         }
-      })
+      }).on('end', () => closeDB(db))
     })
 }
 
@@ -227,7 +243,7 @@ export async function setSubscriptionForCustomer(customerId: string, subscriptio
           throw err
         }
       })
-    })
+    }).on('end', () => closeDB(db))
 }
 
 // // ---------------- Users
@@ -249,7 +265,7 @@ export async function upsertUser(userEmail: string, nickname: string) {
         console.error(err)
         throw err
       }
-    })
+    }).on('end', () => closeDB(db))
 }
 
 export async function getUserData(userId: string) {
@@ -262,7 +278,7 @@ export async function getUserData(userId: string) {
         console.error(err)
         reject(err)
       } else resolve(result)
-    })
+    }).on('end', () => closeDB(db))
   })
 }
 
@@ -275,6 +291,45 @@ export async function updateUserSession(sessionId: string, userId: string) {
       console.error(err)
       throw err
     }
+  }).on('end', () => closeDB(db))
+}
+
+
+// JOBS
+
+export async function addNewJob(messageId: string, action: string, jobName: string) {
+  const db = openDB()
+
+  const jobId = uuidv4()
+  db.query(`INSERT INTO JobsQueue (JobId, MessageID, Action, JobName) 
+    VALUES (?, ?, ?, ?)`, [jobId, messageId, action, jobName], (err, result) => {
+    if (err) {
+      console.error(err)
+      throw err
+    }
+  }).on('end', () => closeDB(db))
+}
+
+export function getNextJob() {
+  const db = openDB()
+  return new Promise<RowDataPacket[]>((resolve, reject) => {
+    db.query<RowDataPacket[]>(`SELECT * FROM JobsQueue order by CreatedAt asc LIMIT 1`, (err, result) => {
+      if (err) {
+        console.error(err)
+        reject(err)
+      } else resolve(result)
+    }).on('end', () => closeDB(db))
   })
 }
 
+export async function removeCompletedJob(jobId: string) {
+
+  const db = openDB()
+
+  db.query("DELETE FROM JobsQueue WHERE JobId = ?", [jobId], (err, result) => {
+    if (err) {
+      console.error(err)
+      throw err
+    }
+  }).on('end', () => closeDB(db))
+}

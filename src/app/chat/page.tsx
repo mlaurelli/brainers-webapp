@@ -43,7 +43,6 @@ export default function Chat() {
             <HeaderNav />
             <main>
                 <div className="layout">
-
                     {/* <!-- navigation --> */}
                     {/* <ChatNavigation /> */}
                     {/* <!-- ./ navigation --> */}
