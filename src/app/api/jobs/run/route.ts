@@ -9,12 +9,10 @@ export async function POST(_req: NextRequest, _res: NextResponse) {
     return NextResponse.json({}, { status: 401 })
   }
 
-  const imagesDirectory = process.env.IMAGES_DIRECTORY!
-
   const job = await getNextJob()
 
   if (job.length === 0) {
-    return NextResponse.json({ success: true, message: 'Queue empty' }, {status: 304})
+    return NextResponse.json({ success: true, message: 'Queue empty' }, {status: 200})
   }
 
   if (job.length > 0 && job[0].JobName === 'store_chat_image') {
