@@ -3,24 +3,20 @@ import { v4 as uuidv4 } from 'uuid'
 import { ConversationType } from '@/components/chat/chatbox'
 import { AiGirlfriend } from '@/models/ai-girlfriend'
 
-let globalPool: Pool | undefined = undefined
+declare global {
+  var globalPool: Pool | undefined
+}
+
+const access: ConnectionOptions = {
+  host: process.env.DB_HOST!,
+  user: process.env.DB_USER!,
+  password: process.env.DB_PASSWORD!,
+  database: process.env.DB_NAME!,
+  // debug: true
+}
 
 export function openDB(): Pool {
-
-  if(typeof globalPool !== 'undefined') {
-    return globalPool
-  }
-
-  const access: ConnectionOptions = {
-    host: process.env.DB_HOST!,
-    user: process.env.DB_USER!,
-    password: process.env.DB_PASSWORD!,
-    database: process.env.DB_NAME!,
-    // debug: true
-  }
-  globalPool = mysql.createPool(access)
-
-  return globalPool
+  return globalThis.globalPool ? globalThis.globalPool : globalThis.globalPool = mysql.createPool(access)
 }
 
 export function closeDB(connection: Pool) {
@@ -133,7 +129,7 @@ export async function saveMessage(message: ConversationType, userId: string, mod
       }
     }).on('end', () => closeDB(db))
 
-    return Promise.resolve(messageID)
+  return Promise.resolve(messageID)
 }
 
 export async function updateMessageImage(messageId: string, path: string) {
