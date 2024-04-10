@@ -3,7 +3,13 @@ import { v4 as uuidv4 } from 'uuid'
 import { ConversationType } from '@/components/chat/chatbox'
 import { AiGirlfriend } from '@/models/ai-girlfriend'
 
-export function openDB(): Connection {
+let globalPool: Pool | undefined = undefined
+
+export function openDB(): Pool {
+
+  if(typeof globalPool !== 'undefined') {
+    return globalPool
+  }
 
   const access: ConnectionOptions = {
     host: process.env.DB_HOST!,
@@ -12,14 +18,12 @@ export function openDB(): Connection {
     database: process.env.DB_NAME!,
     // debug: true
   }
-  let conn = mysql.createConnection(access)
+  globalPool = mysql.createPool(access)
 
-  conn.connect()
-
-  return conn
+  return globalPool
 }
 
-export function closeDB(connection: Connection) {
+export function closeDB(connection: Pool) {
   // Currently not needed, useful in case we need to enhance db connection pool management
 }
 
