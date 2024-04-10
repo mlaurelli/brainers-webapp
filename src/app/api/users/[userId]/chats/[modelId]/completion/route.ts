@@ -39,6 +39,7 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
   // Instantiate model and prompt.
   const model = new ChatGroq({
     apiKey: process.env.GROQ_API_KEY,
+    modelName: girlfriend.model,
     temperature: girlfriend.temperature,
     maxTokens: girlfriend.max_tokens,
     stop: girlfriend.stop,
