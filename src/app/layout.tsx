@@ -1,26 +1,27 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { getServerSession } from "next-auth/next";
-import SessionWrapper from "../components/session-wapper";
+import type { Metadata, Viewport } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import { getServerSession } from "next-auth/next"
+import ProvidersWrapper from "../components/providers-wrapper"
+import "../../public/assets/scss/color.scss"
 
-import '../../public/dist/icons/themify/themify-icons.css'
-import '../../public/dist/icons/materialicons/css/materialdesignicons.min.css'
-import '../../public/dist/vendor/bundle.css'
-import '../../public/dist/vendor/slick/slick-theme.css'
-import '../../public/dist/vendor/slick/slick.css'
-import '../../public/dist/vendor/fancybox/jquery.fancybox.min.css'
-import '../../public/dist/css/app.css'
-import '../../public/dist/css/landing-page.css'
-import Script from "next/script";
-import { authOptions } from "./api/auth/[...nextauth]/auth-options";
+import { authOptions } from "./api/auth/[...nextauth]/auth-options"
+import SessionWrapper from "@/components/session-wapper"
+import Head from "next/head"
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const viewport: Viewport = {
+  themeColor: 'width=device-width, initial-scale=1',
+}
 
 export const metadata: Metadata = {
   title: "Brainers Chat AI girlfriend",
   description: "Chat with your beautiful AI girlfriend",
-};
+  keywords: ["Brainers,AI,Girlfriend"],
+  authors: [{ name: "Brainers", url: "https://brain.michelelaurelli.it" }],
+  icons: [{ rel: "icon", url: "/favicon.png" }, { rel: "shortcut icon", url: "/favicon.png" }],
+}
 
 export default async function RootLayout({
   children,
@@ -31,27 +32,11 @@ export default async function RootLayout({
   return (
     <SessionWrapper>
       <html lang="it">
-        <body className={inter.className}>{children}</body>
-        {/* <!-- Bundle scripts --> */}
-        <Script src="dist/vendor/bundle.js"></Script>
-
-        {/* <!-- Feather icons --> */}
-        <Script src="./dist/icons/feather/feather.min.js"></Script>
-
-        {/* <!-- Slick --> */}
-        <Script src="dist/vendor/slick/slick.min.js"></Script>
-
-        {/* <!-- Fancybox --> */}
-        <Script src="dist/vendor/fancybox/jquery.fancybox.min.js"></Script>
-
-        {/* <!-- Jquery Stopwatch --> */}
-        <Script src="dist/vendor/jquery.stopwatch.js"></Script>
-
-        {/* <!-- Sweetalert2 --> */}
-        <Script src="dist/vendor/sweetalert2.js"></Script>
-
-        {/* <!-- App Scripts --> */}
-        <Script src="./dist/js/app.min.js"></Script>
+        <body className={inter.className}>
+          <ProvidersWrapper userId={session?.user?.email}>
+            {children}
+          </ProvidersWrapper>
+        </body>
       </html>
     </SessionWrapper>
   );

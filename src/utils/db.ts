@@ -71,7 +71,7 @@ export async function getConversationWithMessages(conversationId: string, userId
             type: models.includes(message.UserOrModelID) ? "in" : "out",
             text: message.MessageText,
             image: message.MessageImage,
-            avatar: models.indexOf(message.UserOrModelID) === -1 ? "/dist/media/img/avatar6.jpg" : girlfriend.avatar,
+            avatar: models.indexOf(message.UserOrModelID) === -1 ? "/contact/4.jpg" : girlfriend.avatar,
             name: models.includes(message.UserOrModelID) ? girlfriend.id : "me",
             messageId: message.MessageID
           } as ConversationType

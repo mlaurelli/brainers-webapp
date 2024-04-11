@@ -1,8 +1,7 @@
 'use client'
 
 import { useSession } from "next-auth/react";
-import { HeroSection } from "../components/home/home";
-import { Dashboard } from "../components/home/dashboard";
+import { Landing } from "./landing/dashboard";
 
 export default function Home() {
 
@@ -10,16 +9,19 @@ export default function Home() {
 
   if (status === 'loading') {
     return <main>
-      Loading
+      <div className="chitchat-loader">
+        <div>
+          <img src="/assets/images/logo/logo_big.png" alt="" />
+          <h3>Simple, secure messaging for fast connect to world..!</h3>
+        </div>
+      </div>
     </main>
   }
 
   if (status === 'authenticated' && session !== null)
-    return <main>
-      <Dashboard session={session} />
-    </main>
+    return <Landing session={session} />
 
   return <div>
-    <HeroSection />
+    Ciao
   </div>
 }

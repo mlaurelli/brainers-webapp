@@ -6,7 +6,7 @@ import { canGetMessage } from "@/utils/subscriptionUsage"
 import { ChatGroq } from "@langchain/groq"
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts"
 import { ChatMessageHistory } from "@langchain/community/stores/message/in_memory"
-import { HumanMessage, AIMessage } from "@langchain/core/messages"
+import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages"
 import {
   RunnableConfig,
   RunnableWithMessageHistory,
@@ -44,12 +44,11 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
     maxTokens: girlfriend.max_tokens,
     stop: girlfriend.stop,
     streaming: false,
-    verbose: false
   })
 
   const prompt = ChatPromptTemplate.fromMessages([
     ["system", girlfriend.prompt],
-    new MessagesPlaceholder("history"),
+    new MessagesPlaceholder("history_chat"),
     ["human", "{input}"],
   ])
 
@@ -72,13 +71,13 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
     runnable: chain,
     getMessageHistory: (_sessionId: string) => messageHistory,
     inputMessagesKey: "input",
-    historyMessagesKey: "history",
+    historyMessagesKey: "history_chat",
     config
   })
 
   // call chatcompletion
   const output = await withHistory.invoke({
-    input: lastMessage,
+    input: lastMessage.text!,
     sessionId: conversationId
   })
 
