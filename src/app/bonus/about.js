@@ -388,7 +388,7 @@ const About = (props) => {
 											Secure Your <span>Messages</span>
 										</h3>
 									</div>
-									<h1>The world's top secure App</h1>
+									<h1>The world&apos;s top secure App</h1>
 									<h4>
 										<span>Desktop App </span>– Easy to use our chat app,
 										Attractive and clean design, with many Features :- Dark &
