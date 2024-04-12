@@ -6,11 +6,17 @@ import Chitchat from "../../containers/chatBoard";
 import RightSide from "../../containers/rightSidebar";
 import ThemeCustomizer from "../../containers/themeCustomizer";
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation";
 
 export default Page
 
 function Page() {
   const { data: session, status } = useSession()
+  const router = useRouter()
+
+  if (!session && status === 'unauthenticated') {
+    router.replace("/")
+  }
   
   useEffect(() => {
     document.body.classList.add("sidebar-active");
@@ -23,7 +29,7 @@ function Page() {
         <Chitchat />
         <RightSide />
       </div>
-      <ThemeCustomizer />
+      {/* <ThemeCustomizer /> */}
     </Fragment>
   );
 }

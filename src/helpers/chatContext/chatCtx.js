@@ -23,7 +23,7 @@ const ChatProvider = (props) => {
   const [isTyeping, setIsTypeing] = useState(false)
 
   useEffect(() => {
-    if (modelId === null) {
+    if (modelId === null && props.userId) {
       getModel().then((data) => {
         setModelId(data.modelId)
         const girlfriend = AiGirlfriend.filter(model => model.id == data.modelId)[0]

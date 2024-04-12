@@ -127,7 +127,7 @@ const CustomChat = (props) => {
   return chatMembers && chats && selectedUser ? (
     <>
       <div className="messages custom-scroll active wallpapers" id="chating">
-        <div className="contact-details">
+        {/* <div className="contact-details">
           <div className="row">
             <form className={`form-inline search-form ${search ? "open" : ""}`}>
               <div className="form-group">
@@ -151,7 +151,7 @@ const CustomChat = (props) => {
                   <h5 color="white">{selectedUser.name}</h5>
                   <div className={`badge ${selectedUser.onlineStatus === "online" ? "badge-success" : "badge-danger"}`}>{selectedUser.onlineStatus === "online" ? "Active" : "InActive"}</div>
                 </div>
-                {/* <div className="media-right">
+                 <div className="media-right">
                   <ul>
                     <li>
                       <Link className="icon-btn btn-light button-effect mute" href="#" onClick={() => setVolum(!volum)}>
@@ -170,10 +170,10 @@ const CustomChat = (props) => {
                       </Link>
                     </li>
                   </ul>
-                </div> */}
+                </div> 
               </div>
             </div>
-            {/* <div className="col">
+             <div className="col">
               <ul className="calls text-right">
                 <li>
                   <Tooltip title="Quick Audio Call" position="bottom-end" trigger="mouseenter">
@@ -376,9 +376,9 @@ const CustomChat = (props) => {
                   </Dropdown>
                 </li>
               </ul>
-            </div> */}
+            </div> *
           </div>
-        </div>
+        </div> */}
         <Modal isOpen={deleteModal} className="add-popup delete-modal" toggle={() => setDeleteModal(!deleteModal)} centered>
           <ModalHeader toggle={() => setDeleteModal(!deleteModal)}></ModalHeader>
           <ModalBody>
@@ -424,7 +424,7 @@ const CustomChat = (props) => {
                           backgroundImage: `url('assets/images/${item.avatar}')`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          display: "block",
+                          // display: "block",
                         }}>
                         <img className="bg-img" src={`/assets/images/${item.avatar}`} alt="Avatar" style={{ display: "none" }} />
                       </div>

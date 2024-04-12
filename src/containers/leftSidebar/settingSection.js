@@ -18,7 +18,9 @@ const SettingSection = (props) => {
     username: props.user ? props.user.nickname : '',
     address: props.user ? props.user.email : '',
     editStatus: false,
+    image: props.user ? props.user.image : '/assets/images/contact/4.jpg',
   });
+
   const [collapseShow, setCollapseShow] = useState({
     security: false,
     privacy: false,
@@ -57,6 +59,17 @@ const SettingSection = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    // wallpaper
+    if(props.session) {
+      setProfile({
+        username: props.session.user.name,
+        image: props.session.user.image,
+        address: props.session.user.email
+      })
+    }
+  }, [props.session]);
+
   const setBackgroundWallpaper = (e, wallpaper) => {
     addBackgroundWallpaper(e, wallpaper);
     config.wallpaper = wallpaper;
@@ -69,7 +82,7 @@ const SettingSection = (props) => {
       id='settings'
     >
       <div className='theme-title'>
-        <div className='media'>
+        <div className='media' style={{display: 'flex', justifyContent: 'space-between'}}>
           <div>
             <h2>Settings</h2>
             <h4>Change your app setting.</h4>
@@ -90,7 +103,7 @@ const SettingSection = (props) => {
             <div
               className='profile'
               style={{
-                backgroundImage: `url(${props.session.user.image})`,
+                backgroundImage: `url(${profile.image})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 display: 'block',

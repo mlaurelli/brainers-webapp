@@ -12,6 +12,7 @@ import { Tooltip } from "react-tippy";
 import Link from "next/link";
 import ChatContext from "../../helpers/chatContext";
 import useUser from "@/utils/useUser"
+import { signOut } from "next-auth/react";
 
 const steps = [
   {
@@ -106,14 +107,14 @@ const Index = (props) => {
         {/* list section */}
         <div className="sidebar-main">
           <ul className="sidebar-top">
-            {/* <li>
+            <li>
               <Tooltip title="Status" position="top" trigger="mouseenter">
                 <NavLink className="button-effect step1" onClick={() => TogglTab("status")} data-intro="Check Status here">
                   <div className="user-popup status one">
                     <div
                       className="bg-size"
                       style={{
-                        backgroundImage: `url("/assets/images/avtar/2.jpg")`,
+                        backgroundImage: `url(${ props.session ? props.session.user.image : "/assets/images/avtar/2.jpg"})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         display: "block",
@@ -123,7 +124,7 @@ const Index = (props) => {
                   </div>
                 </NavLink>
               </Tooltip>
-            </li> */}
+            </li>
             {/* <li>
               <Tooltip title="Favourite" position="top" trigger="mouseenter">
                 <NavLink className={`icon-btn btn-light button-effect ${activeTab === "fevorite" ? "active" : ""}`} onClick={() => TogglTab("fevorite")}>
@@ -131,14 +132,14 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li> */}
-            <li>
+            {/* <li>
               <Tooltip title="Document" position="top" trigger="mouseenter">
                 <NavLink className={`icon-btn btn-light button-effect ${activeTab === "document" ? "active" : ""}`} onClick={() => TogglTab("document")}>
                   {" "}
                   <i className="fa fa-file-text"></i>
                 </NavLink>
               </Tooltip>
-            </li>
+            </li> */}
             {/* <li>
               <Tooltip title="Contact" position="top" trigger="mouseenter">
                 <NavLink className={`icon-btn btn-light button-effect ${activeTab === "contact" ? "active" : ""}`} onClick={() => TogglTab("contact")}>
@@ -175,7 +176,7 @@ const Index = (props) => {
             </li>
             <li>
               <Tooltip title="SignOut" position="top" trigger="mouseenter">
-                <NavLink className="icon-btn btn-light" onClick={() => Logout()}>
+                <NavLink className="icon-btn btn-light" onClick={() => signOut()}>
                   {" "}
                   <i className="fa fa-power-off"> </i>
                 </NavLink>
@@ -203,7 +204,7 @@ const Index = (props) => {
             <SettingSection tab={activeTab} ActiveTab={setActiveTab} user={user} session={props.session} />
           </TabPane>
           <TabPane tabId="status">
-            <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
+            <StatusSection tab={activeTab} ActiveTab={setActiveTab} user={user} session={props.session} />
           </TabPane>
         </TabContent>
       </aside>

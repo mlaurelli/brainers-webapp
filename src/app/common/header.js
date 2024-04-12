@@ -55,7 +55,7 @@ const Header = () => {
 													<NavItem className="active">
 														<NavLink href="/messenger">Messenger</NavLink>
 													</NavItem>
-													<Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
+													{/* <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
 														<DropdownToggle nav caret>Blog
 														</DropdownToggle>
 														<DropdownMenu>
@@ -83,7 +83,7 @@ const Header = () => {
 															<Link href="/bonus/elements">Elements</Link>
 															<Link href="/bonus/price">Price</Link>
 														</DropdownMenu>
-													</Dropdown>
+													</Dropdown> */}
 												</Nav>
 											</Collapse>
 										</Navbar>

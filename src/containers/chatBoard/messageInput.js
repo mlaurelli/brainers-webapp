@@ -453,6 +453,7 @@ const MessageInput = (props) => {
         />
         <a
           className="icon-btn btn-outline-primary button-effect mr-3 ml-3"
+          style={{marginLeft: '1rem'}}
           href="#"
           onClick={(e) => handleImageRequest(e.target.value)}
         >
@@ -472,6 +473,7 @@ const MessageInput = (props) => {
               ? () => handleMessagePress("send")
               : () => handleNoMessageSend("send")
           }
+          style={{marginLeft: '1rem'}}
         >
           <Send />
         </button>

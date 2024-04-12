@@ -1,31 +1,49 @@
+'use client'
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { X } from "react-feather"
 const StatusSection = (props) => {
-    const closeLeftSide = () => {
-      document.querySelector(".status-tab").classList.remove("active")
-      document.querySelector(".recent-default").classList.add("active");
-      props.ActiveTab("")
+  const closeLeftSide = () => {
+    document.querySelector(".status-tab").classList.remove("active")
+    // document.querySelector(".recent-default").classList.add("active");
+    props.ActiveTab("")
+  }
+  const [profile, setProfile] = useState(null)
+
+  useEffect(() => {
+    if (props.session) {
+      setProfile({
+        username: props.session.user.name,
+        image: props.session.user.image,
+        address: props.session.user.email
+      })
     }
-    return (
-        <div className={`status-tab custom-scroll dynemic-sidebar ${props.tab === "status" ? "active" : ""}`} id="status">
-            <div className="my-status-box">
-              <div className="status-content">
-                <div className="media">
-                  <div className="img-status">
-                    <div className="user-status  bg-size" style={{ backgroundImage: `url('../assets/images/avtar/girls.jpg')`,backgroundSize:"cover",backgroundPosition:"center",display:"block" }}></div>
-                    <div className="upload-img">
+  }, [props.session])
+
+  return (
+    <div className={`status-tab custom-scroll dynemic-sidebar ${props.tab === "status" ? "active" : ""}`} id="status">
+      <div className="my-status-box">
+        <div className="status-content">
+          <div className="media" style={{display: 'flex', justifyContent: 'space-between'}}>
+            <div className="img-status">
+              <div className="user-status bg-size" style={{ backgroundImage: `url(${profile ? profile.image : '../assets/images/avtar/girls.jpg'})`, backgroundSize: "cover", backgroundPosition: "center", display: "block" }}></div>
+              {/* <div className="upload-img">
                       <input type="file"/>
-                    </div>
-                  </div>
-                  <div className="media-body">
-                    <h3>my status</h3>
-                    <p>tap to add status Update</p>
-                  </div>
-                  <div><Link className="icon-btn btn-outline-light btn-sm close-panel" href="#" onClick={() => closeLeftSide()}><X/></Link></div>
-                </div>
-              </div>
+                    </div> */}
             </div>
-            <div className="contact-status-box">
+            <div className="media-body">
+              <h3>My Status</h3>
+              <p>Tap to add status Update</p>
+            </div>
+            <div>
+              <Link className="icon-btn btn-outline-light btn-sm close-panel" href="#" onClick={() => closeLeftSide()}><X />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="contact-status-box">
               <div className="theme-title">
                 <h3>Recent Update</h3>
               </div>
@@ -131,9 +149,9 @@ const StatusSection = (props) => {
                   </li>
                 </ul>
               </div>
-            </div>
-        </div>
-    );
+            </div> */}
+    </div>
+  );
 }
 
 export default StatusSection;

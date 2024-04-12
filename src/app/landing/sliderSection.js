@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Col, Container, Row } from "reactstrap";
 import TeamWorkModal from "./teamWorkModal";
 
+import { signIn } from "next-auth/react"
+
 const Slider = () => {
 	const [VideoModal, setVideoModal] = useState(false);
 
@@ -24,7 +26,7 @@ const Slider = () => {
 									</h4>
 									<div className="downlaod">
 										<div className="footer-btn">
-											<Link className="btn active" href="/messenger">
+											<Link className="btn active" href="#" onClick={() => signIn('auth0')}>
 													Start for free
 											</Link>
 										</div>
