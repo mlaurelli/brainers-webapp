@@ -20,7 +20,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
         );
     } catch (err) {
         console.log(`⚠️  Webhook signature verification failed.`);
-        console.log({ error: err });
+        console.log({
+            error: err, bodyJson,
+            signature,
+            webhookSecret
+        });
         return NextResponse.json({ error: err }, { status: 400 })
     }
     // Extract the object from the event.
