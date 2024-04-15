@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { X } from "react-feather"
+import { loadStripe } from "@stripe/stripe-js"
+import { Badge } from 'reactstrap'
+
 const StatusSection = (props) => {
   const closeLeftSide = () => {
     document.querySelector(".status-tab").classList.remove("active")
@@ -11,30 +14,98 @@ const StatusSection = (props) => {
   }
   const [profile, setProfile] = useState(null)
 
+
+  const proItemId = process.env.NEXT_PUBLIC_PRO_SUBSCRIPTION
+
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  const createCheckOutSession = async (itemId, profileId) => {
+    // setLoading(true);
+    const stripe = await stripePromise;
+    const checkoutSession = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemId,
+        userId: profileId
+      }),
+    })
+    if (!stripe || stripe === null) {
+      alert("Something wrong with payment, retry later")
+    }
+
+    if (checkoutSession.status === 208) {
+      alert("Sottoscrizione ancora valida")
+      return
+    }
+
+    const sessionId = (await checkoutSession.json()).id
+
+    try {
+      const saveSession = await fetch("/api/users/" + profileId + "/payment/session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId: sessionId
+        }),
+      })
+
+      if (saveSession.status != 200) {
+        console.error(saveSession)
+        alert(saveSession)
+      }
+
+      const result = await stripe.redirectToCheckout({
+        sessionId,
+      });
+
+      if (result.error) {
+        alert(result.error.message)
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   useEffect(() => {
-    if (props.session) {
+    if (props.session && props.user) {
       setProfile({
         username: props.session.user.name,
         image: props.session.user.image,
-        address: props.session.user.email
+        address: props.session.user.email,
+        tier: props.user.subscriptionId
       })
     }
-  }, [props.session])
+  }, [props.session, props.user])
 
   return (
     <div className={`status-tab custom-scroll dynemic-sidebar ${props.tab === "status" ? "active" : ""}`} id="status">
       <div className="my-status-box">
         <div className="status-content">
-          <div className="media" style={{display: 'flex', justifyContent: 'space-between'}}>
-            <div className="img-status">
-              <div className="user-status bg-size" style={{ backgroundImage: `url(${profile ? profile.image : '../assets/images/avtar/girls.jpg'})`, backgroundSize: "cover", backgroundPosition: "center", display: "block" }}></div>
-              {/* <div className="upload-img">
-                      <input type="file"/>
-                    </div> */}
-            </div>
+          <div className="media" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="img-status" style={{ backgroundColor: 'transparent' }}>
+              {profile ? <img className="user-status bg-size"
+                src={profile.image}
+              ></img>
+                : <div className="user-status bg-size"
+                  style={{
+                    backgroundImage: `url('../assets/images/avtar/girls.jpg'})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "block"
+                  }}></div>
+              }</div>
             <div className="media-body">
               <h3>My Status</h3>
               <p>Tap to add status Update</p>
+              {profile && profile.tier === 'PRO_TIER' ? <><Badge color="warning" pill>PRO</Badge></> : <>
+                <a onClick={() => createCheckOutSession(proItemId, profile.address)} className="btn btn-primary btn-sm hover-animate">
+                  Upgrade Now
+                  <i className="mdi mdi-arrow-right ml-1 small"></i>
+                </a></>}
             </div>
             <div>
               <Link className="icon-btn btn-outline-light btn-sm close-panel" href="#" onClick={() => closeLeftSide()}><X />

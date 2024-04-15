@@ -4,7 +4,8 @@ import { User, Search, ChevronLeft, Phone, Video, Trash2, Slash, MoreVertical, U
 import ChatContext from "../../helpers/chatContext";
 import { Tooltip } from "react-tippy";
 import MessageInput from "./messageInput";
-import Link from "next/link";
+import Link from "next/link"
+import { ImageModal } from "@/components/images/modal";
 
 const CustomChat = (props) => {
   const [volum, setVolum] = useState(true);
@@ -449,15 +450,18 @@ const CustomChat = (props) => {
                               </> : ""}
                               {item.image ?
                                 <ul className="auto-gallery">
-                                  <li
-                                    style={{
-                                      backgroundImage: `url('${item.image}')`,
-                                      backgroundSize: "cover",
-                                      backgroundPosition: "center",
-                                      display: "block",
-                                    }}>
-                                    {/* <img className="bg-img" src={`${item.image}`} alt="Avatar" style={{ display: "none" }} /> */}
-                                  </li>
+                                  <ImageModal id={`${item.id}-image`} image={item.image} >
+                                    <li
+                                      style={{
+                                        backgroundImage: `url('${item.image}')`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center",
+                                        display: "block",
+                                      }}>
+
+                                      {/* <img className="bg-img" src={`${item.image}`} alt="Avatar" style={{ display: "none" }} /> */}
+                                    </li>
+                                  </ImageModal>
                                 </ul> : ""}
                               {/* {item.stickers ? <img src={item.stickers} alt="" /> : ""} */}
                               {/* {<div className="badge badge-success sm ml-2"> R</div>} */}
